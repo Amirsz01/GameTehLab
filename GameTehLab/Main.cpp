@@ -9,17 +9,6 @@
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(WINDOW_HIGH, WINDOW_WIDTH), "SFML works!");
-	while (window.isOpen())
-	{
-		sf::Event event;
-		Game app(window);
-		while (window.pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window.close();
-		}
-		window.clear();
-	}
+	Game app;
 	return 0;
 }

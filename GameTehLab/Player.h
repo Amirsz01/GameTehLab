@@ -7,7 +7,6 @@ enum Side
 
 class Player
 {
-
-private:
+public:
 	Side _SIDE;
 };
