@@ -16,3 +16,9 @@ int Cell::Put(Player& _Player)
 	changed = true;
 	return 0;
 }
+
+void Cell::Restart()
+{
+	value = -1;
+	changed = false;
+}
