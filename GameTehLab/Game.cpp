@@ -2,24 +2,19 @@
 
 Game::Game()
 {
+	NumPoints = 4;
+	_Range = 50;
+	_Thickness = 2;
+	_Shift = 200;
+	_TextHeight = _Range * 0.8;
+
 	this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HIGH), "BEST GAME IN THE WORLD");
-	switch ((CreateMenu()))
-	{
-	case 0:
-		SetPlayers();
-		CreateArea();
-		DrawArea();
-		StartGame();
-		break;
-	case 1:
-		break;
-	default:
-		break;
-	}
+	CreateMenu();
 }
 
 int Game::CreateMenu()
 {
+	this->window->clear();
 	ifstream menu("Menu.txt");
 	if (!menu.is_open())
 	{
@@ -40,6 +35,7 @@ int Game::CreateMenu()
 		sf::Event event;
 		sf::Vector2i mouseCord;
 		int ind_col, ind_row;
+		int iMenuValue;
 		while (this->window->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -53,21 +49,61 @@ int Game::CreateMenu()
 					{
 						if (mouseCord.x >= WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 && mouseCord.x < WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 + BUTTON_WIDTH) // если клик в области кнопок
 						{
-							int _range = (BUTTON_HEIGHT - TEXT_STATUS_HEIGHT) / 2 - WIDTH*2;
-							int _correctCord = (mouseCord.y - _range/2 - WIDTH) % (int(BUTTON_HEIGHT*1.2));
-							int numButton = (mouseCord.y - _range/2 - WIDTH) / (BUTTON_HEIGHT * 1.2);
+							int _range = (BUTTON_HEIGHT - TEXT_STATUS_HEIGHT) / 2 - _Thickness * 2;
+							int _correctCord = (mouseCord.y - _range/2 - _Thickness) % (int(BUTTON_HEIGHT*1.2));
+							int numButton = (mouseCord.y - (_range/2) - _Thickness) / int(BUTTON_HEIGHT * 1.2);
 							if (_correctCord > 0 && _correctCord < BUTTON_HEIGHT) // если клик в области кнопок
 							{
 								switch (numButton)
 								{
 								case 0:
-									return 0;
+									SetPlayers();
+									CreateArea();
+									DrawArea();
+									StartGame();
+									break;
+								case 1:
+									cout << "***************************" << endl
+										<< "Меню настроек поля" << endl
+										<< "***************************" << endl
+										<< "[1] Установить размер поля" << endl
+										<< "[2] Установить размер клетки" << endl
+										<< "[3] Установить толщину границы клетки" << endl
+										<< "[4] Установить смещение" << endl
+										<< "Выбор: ";
+									cin >> iMenuValue;
+									switch (iMenuValue)
+									{
+									case 1:
+										cout << "Значение параметра: " << NumPoints << endl
+											<< "Новое значение: ";
+										cin >> NumPoints;
+										break;
+									case 2:
+										cout << "Значение параметра: " << _Range << endl
+											<< "Новое значение: ";
+										cin >> _Range;
+										_TextHeight = _Range * 0.8;
+										break;
+									case 3:
+										cout << "Значение параметра: " << _Thickness << endl
+											<< "Новое значение: ";
+										cin >> _Thickness;
+										break;
+									case 4:
+										cout << "Значение параметра: " << _Shift << endl
+											<< "Новое значение: ";
+										cin >> _Shift;
+										break;
+									default:
+										break;
+									}
+									break;
 								case 2:
 									this->window->close();
 									return 2;
-									break;
 								default:
-									break;
+									return -2;
 								}
 							}
 						}
@@ -80,24 +116,24 @@ int Game::CreateMenu()
 
 void Game::ClearPole()
 {
-	for (size_t i = 0; i < POLE; ++i)
+	ArrayPoints.resize(NumPoints * NumPoints);
+	for (size_t i = 0; i < NumPoints * NumPoints; ++i)
 	{
-		for (size_t j = 0; j < POLE; ++j)
-		{
-			ArrayPoints[i][j].Restart();
-		}
+		ArrayPoints[i].Restart();
 	}
+	ArrayPoleCol.clear();
+	ArrayPoleRow.clear();
 }
 
 void Game::CreateArea()
 {
 	ClearPole();
-	for (size_t i = 0; i < POLE + 1; i++)
+	for (size_t i = 0; i < NumPoints + 1; i++)
 	{
-		ArrayPoleCol.push_back(sf::RectangleShape(sf::Vector2f(RANGE * POLE, WIDTH)));
-		ArrayPoleRow.push_back(sf::RectangleShape(sf::Vector2f(WIDTH, RANGE * POLE)));
-		ArrayPoleCol[i].setPosition(0 + SHIFT, i * RANGE + SHIFT);
-		ArrayPoleRow[i].setPosition(i * RANGE + SHIFT, 0 + SHIFT);
+		ArrayPoleCol.push_back(sf::RectangleShape(sf::Vector2f(_Range * NumPoints, _Thickness)));
+		ArrayPoleRow.push_back(sf::RectangleShape(sf::Vector2f(_Thickness, _Range * NumPoints)));
+		ArrayPoleCol[i].setPosition(0 + _Shift, i * _Range + _Shift);
+		ArrayPoleRow[i].setPosition(i * _Range + _Shift, 0 + _Shift);
 	}
 }
 
@@ -113,28 +149,25 @@ int Game::DrawArea()
 	}
 	sf::Text text;
 	text.setFont(font);
-	text.setCharacterSize(TEXT_HEIGHT); // in pixels, not points!
+	text.setCharacterSize(_TextHeight); // in pixels, not points!
 	text.setFillColor(sf::Color::White);
 	text.setStyle(sf::Text::Bold);
-	for (size_t i = 0; i < POLE + 1; ++i)
+	for (size_t i = 0; i < NumPoints + 1; ++i)
 	{
 		this->window->draw(ArrayPoleCol[i]);
 		this->window->draw(ArrayPoleRow[i]);
 	}
 	bool EmptyPoints = false;
-	for (size_t i = 0; i < POLE; ++i)
+	for (size_t i = 0; i < NumPoints*NumPoints; ++i)
 	{
-		for (size_t j = 0; j < POLE; ++j)
-		{
-			if (ArrayPoints[i][j].value == -1)
+			if (ArrayPoints[i].value == -1)
 			{
 				EmptyPoints = true;
 				continue;
 			}
-			text.setString(to_string(ArrayPoints[i][j].value));
-			text.setPosition(GET_CENTER(i) - (text.getLocalBounds().width / 2) , GET_CENTER(j) - (TEXT_HEIGHT / 1.7));
+			text.setString(to_string(ArrayPoints[i].value));
+			text.setPosition(GET_CENTER(i / NumPoints) - (text.getLocalBounds().width / 2), GET_CENTER(i % NumPoints) - (_TextHeight / 1.7));
 			this->window->draw(text);
-		}
 	}
 	if (!EmptyPoints)
 	{
@@ -162,6 +195,7 @@ void Game::SetPlayers()
 
 void Game::StartGame()
 {
+	bool EndGame = false;
 	while (this->window->isOpen())
 	{
 		sf::Event event;
@@ -176,50 +210,46 @@ void Game::StartGame()
 				if (event.key.code == sf::Mouse::Left) // а именно левая
 				{
 					mouseCord = sf::Mouse::getPosition(*this->window);
-					if (mouseCord.x >= SHIFT && mouseCord.x <= WINDOW_WIDTH && mouseCord.y >= SHIFT && mouseCord.y <= WINDOW_HIGH) // если клик в области экрана
+					if (mouseCord.x >= _Shift && mouseCord.x <= WINDOW_WIDTH && mouseCord.y >= _Shift && mouseCord.y <= WINDOW_HIGH && !EndGame) // если клик в области экрана
 					{
-						ind_col = (mouseCord.x - SHIFT) / RANGE;
-						ind_row = (mouseCord.y - SHIFT) / RANGE;
-						if (ind_col >= 0 && ind_col < POLE && ind_row >= 0 && ind_row < POLE)
+						ind_col = (mouseCord.x - _Shift) / _Range;
+						ind_row = (mouseCord.y - _Shift) / _Range;
+						if (ind_col >= 0 && ind_col < NumPoints && ind_row >= 0 && ind_row < NumPoints)
 						{
-							if (!ArrayPoints[ind_col][ind_row].Put(*Current_Player))
+							if (!ArrayPoints[ind_col * NumPoints + ind_row].Put(*Current_Player))
 							{
 								if (DrawArea() == 2)
 								{
 									this->EndGame();
-									break;
+									EndGame = true;
+									continue;
 								}
 								Current_Player->_SIDE == ZERO ? Current_Player = &Players[1] : Current_Player = &Players[0];
 							}
 						}
+					}
+					else if (EndGame)
+					{
+						CreateMenu();
 					}
 				}
 			}
 		}
 		if (IS_NETWORK && Current_Player->Computer)
 		{
-			bool GO_BREAK = false;
-			for (size_t i = POLE - 1; i >= 0; i--)
+			for (int i = NumPoints*NumPoints - 1; i >= 0; i--)
 			{
-				for (size_t j = POLE - 1; j >= 0; j--)
-				{
-					if (!ArrayPoints[i][j].changed)
-						if (!ArrayPoints[i][j].Put(*Current_Player))
+				if (!ArrayPoints[i].changed)
+					if (!ArrayPoints[i].Put(*Current_Player))
+					{
+						if (DrawArea() == 2)
 						{
-							if (DrawArea() == 2)
-							{
-								this->EndGame();
-								continue;
-							}
-							Current_Player->_SIDE == ZERO ? Current_Player = &Players[1] : Current_Player = &Players[0];
-							GO_BREAK = true;
-							break;
+							this->EndGame();
+							continue;
 						}
-				}
-				if (GO_BREAK)
-				{
-					break;
-				}
+						Current_Player->_SIDE == ZERO ? Current_Player = &Players[1] : Current_Player = &Players[0];
+						break;
+					}
 			}
 		}
 	}
@@ -230,10 +260,6 @@ void Game::EndGame()
 	CalculateScore();
 	setStatus("END GAME", 0);
 	this->window->display();
-	SetPlayers();
-	ClearPole();
-	system("pause");
-	DrawArea();
 }
 
 
@@ -242,7 +268,7 @@ void Game::setStatus(string text, int height)
 	sf::Font font;
 	if (!font.loadFromFile("Equal-Regular.otf"))
 	{
-		cout << "GG" << endl;
+		cout << "Нет файла со шрифтом" << endl;
 		return;
 	}
 	sf::Text status;
@@ -251,7 +277,7 @@ void Game::setStatus(string text, int height)
 	status.setFillColor(sf::Color::White);
 	status.setStyle(sf::Text::Bold);
 	status.setString(text);
-	status.setPosition(SHIFT + (POLE * RANGE / 2)  - status.getGlobalBounds().width / 2, height);
+	status.setPosition(_Shift + (NumPoints * _Range / 2)  - status.getGlobalBounds().width / 2, height);
 	this->window->draw(status);
 }
 
@@ -260,7 +286,7 @@ void Game::setButton(string text, int height)
 	sf::Font font;
 	if (!font.loadFromFile("Equal-Regular.otf"))
 	{
-		cout << "GG" << endl;
+		cout << "Нет файла со шрифтом" << endl;
 		return;
 	}
 	sf::Text button;
@@ -271,7 +297,7 @@ void Game::setButton(string text, int height)
 	button.setString(text);
 	button.setPosition(WINDOW_WIDTH / 2 - button.getGlobalBounds().width / 2, height);
 	sf::RectangleShape Frame(sf::Vector2f(BUTTON_WIDTH, BUTTON_HEIGHT));
-	Frame.setOutlineThickness(WIDTH);
+	Frame.setOutlineThickness(_Thickness);
 	Frame.setFillColor(sf::Color(0, 0, 0, 0));
 	Frame.setPosition(WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2, ((BUTTON_HEIGHT - TEXT_STATUS_HEIGHT)/2) + height);
 	this->window->draw(Frame);
@@ -280,24 +306,21 @@ void Game::setButton(string text, int height)
 
 void Game::CalculateScore()
 {
-	int score[POLE * 2 + 2];
-	for (size_t i = 0; i < POLE * 2 + 2; i++)
+	int *score = new int[NumPoints * 2 + 2];
+	for (size_t i = 0; i < NumPoints * 2 + 2; i++)
 	{
 		score[i] = 0;
 	}
-	for (size_t i = 0; i < POLE; i++)
+	for (size_t i = 0; i < NumPoints* NumPoints; i++)
 	{
-		for (size_t j = 0; j < POLE; j++)
-		{
-			addNum(score[j+POLE], ArrayPoints[i][j].value);
-			addNum(score[i], ArrayPoints[i][j].value);
-			if (i == j)
-				addNum(score[POLE*2], ArrayPoints[i][j].value);
-			if (i + j + 1 == POLE)
-				addNum(score[POLE * 2 + 1], ArrayPoints[i][j].value);
-		}
+		addNum(score[i% NumPoints + NumPoints], ArrayPoints[i/ NumPoints + i% NumPoints].value);
+		addNum(score[i% NumPoints], ArrayPoints[i/ NumPoints + i% NumPoints].value);
+		if (i / NumPoints == i % NumPoints)
+			addNum(score[NumPoints *2], ArrayPoints[i/ NumPoints + i% NumPoints].value);
+		if (i / NumPoints + i % NumPoints % NumPoints + 1 == NumPoints)
+			addNum(score[NumPoints * 2 + 1], ArrayPoints[i/ NumPoints + i% NumPoints].value);
 	}
-	for (size_t i = 0; i < POLE * 2 + 2; i++)
+	for (size_t i = 0; i < NumPoints * 2 + 2; i++)
 	{
 		if (score[i] % 2 == 0)
 		{
@@ -322,7 +345,7 @@ void Game::CalculateScore()
 			}
 		}
 	}
-	Players[0].Score > Players[1].Score ? setStatus("PLAYER 0 WIN", (POLE * RANGE + SHIFT) / 2) : Players[1].Score != Players[0].Score ? setStatus("PLAYER 1 WIN", (POLE * RANGE + SHIFT) / 2) : setStatus("GAME DRAW", (POLE * RANGE + SHIFT) / 2);
+	Players[0].Score > Players[1].Score ? setStatus("PLAYER 0 WIN", (NumPoints * _Range + _Shift) / 2) : Players[1].Score != Players[0].Score ? setStatus("PLAYER 1 WIN", (NumPoints * _Range + _Shift) / 2) : setStatus("GAME DRAW", (NumPoints * _Range + _Shift) / 2);
 }
 
 void Game::addNum(int& Origin, int Add)

@@ -4,19 +4,8 @@
 #include <iostream>
 #include "Player.h"
 #include "Cell.h"
+#include "Defines.h"
 #include "fstream"
-
-#define POLE 3
-#define RANGE 50 // Расстояние между клетками
-#define WIDTH 2
-#define SHIFT 200
-#define WINDOW_HIGH 720
-#define WINDOW_WIDTH 1280
-#define TEXT_HEIGHT RANGE * 0.8
-#define TEXT_STATUS_HEIGHT 100
-#define BUTTON_WIDTH 400
-#define BUTTON_HEIGHT 110
-#define GET_CENTER(d) (((d * RANGE + SHIFT) + ((d+1) * RANGE + SHIFT)) / 2) 
 
 #define IS_NETWORK false
 
@@ -24,24 +13,44 @@ using namespace std;
 
 class Game
 {
+	/*	Вектора для хранения данных	*/
 	vector<sf::RectangleShape> ArrayPoleCol;
 	vector<sf::RectangleShape> ArrayPoleRow;
-	Cell ArrayPoints[POLE][POLE];
+	vector<Cell> ArrayPoints;
 	Player* Current_Player;
 	Player Players[2];
 	sf::RenderWindow* window;
+
+	/*	Настройки поля	*/
+	int NumPoints; // Число клеток
+	int _Range; // Расстояние между клетками
+	int _Thickness; // Толщина стенок
+	int _Shift; // Смещение
+	int _TextHeight; //Высота текста
 public:
 	Game();
+
+	/*	Пошаговое создание игры	*/
 	int CreateMenu(); // Создание меню
 	void ClearPole(); // Очистка поля
 	void CreateArea(); // Создание поля
 	int DrawArea(); // Рисовка поля и изменений
 	void SetPlayers(); // Установка игрков
 	void StartGame(); // Начало игры
-	void EndGame(); // Конеч игры
+	void EndGame(); // Конец игры
+
+	/*	Вывод текста	*/
 	void setStatus(string text, int height);
 	void setButton(string text, int height);
+
+	/*	Подсчет очков	*/
 	void CalculateScore(); // Подсчет очков
 	void addNum(int &Origin, int Add);
+
+	/*	Расчет центра в клетке	*/
+	int GET_CENTER(int point)
+	{
+		return ((point * _Range + _Shift) + ((point + 1) * _Range + _Shift)) / 2;
+	}
 };
 
