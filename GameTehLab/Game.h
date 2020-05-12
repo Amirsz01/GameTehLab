@@ -1,4 +1,4 @@
-#pragma once
+п»ї#pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <iostream>
@@ -13,7 +13,7 @@ using namespace std;
 
 class Game
 {
-	/*	Вектора для хранения данных	*/
+	/*	Р’РµРєС‚РѕСЂР° РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РґР°РЅРЅС‹С…	*/
 	vector<sf::RectangleShape> ArrayPoleCol;
 	vector<sf::RectangleShape> ArrayPoleRow;
 	vector<Cell> ArrayPoints;
@@ -21,33 +21,33 @@ class Game
 	Player Players[2];
 	sf::RenderWindow* window;
 
-	/*	Настройки поля	*/
-	int NumPoints; // Число клеток
-	int _Range; // Расстояние между клетками
-	int _Thickness; // Толщина стенок
-	int _Shift; // Смещение
-	int _TextHeight; //Высота текста
+	/*	РќР°СЃС‚СЂРѕР№РєРё РїРѕР»СЏ	*/
+	int NumPoints; // Р§РёСЃР»Рѕ РєР»РµС‚РѕРє
+	int _Range; // Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РєР»РµС‚РєР°РјРё
+	int _Thickness; // РўРѕР»С‰РёРЅР° СЃС‚РµРЅРѕРє
+	int _Shift; // РЎРјРµС‰РµРЅРёРµ
+	int _TextHeight; //Р’С‹СЃРѕС‚Р° С‚РµРєСЃС‚Р°
 public:
 	Game();
 
-	/*	Пошаговое создание игры	*/
-	int CreateMenu(); // Создание меню
-	void ClearPole(); // Очистка поля
-	void CreateArea(); // Создание поля
-	int DrawArea(); // Рисовка поля и изменений
-	void SetPlayers(); // Установка игрков
-	void StartGame(); // Начало игры
-	void EndGame(); // Конец игры
+	/*	РџРѕС€Р°РіРѕРІРѕРµ СЃРѕР·РґР°РЅРёРµ РёРіСЂС‹	*/
+	int CreateMenu(); // РЎРѕР·РґР°РЅРёРµ РјРµРЅСЋ
+	void ClearPole(); // РћС‡РёСЃС‚РєР° РїРѕР»СЏ
+	void CreateArea(); // РЎРѕР·РґР°РЅРёРµ РїРѕР»СЏ
+	int DrawArea(); // Р РёСЃРѕРІРєР° РїРѕР»СЏ Рё РёР·РјРµРЅРµРЅРёР№
+	void SetPlayers(); // РЈСЃС‚Р°РЅРѕРІРєР° РёРіСЂРєРѕРІ
+	void StartGame(); // РќР°С‡Р°Р»Рѕ РёРіСЂС‹
+	void EndGame(); // РљРѕРЅРµС† РёРіСЂС‹
 
-	/*	Вывод текста	*/
+	/*	Р’С‹РІРѕРґ С‚РµРєСЃС‚Р°	*/
 	void setStatus(string text, int height);
 	void setButton(string text, int height);
 
-	/*	Подсчет очков	*/
-	void CalculateScore(); // Подсчет очков
+	/*	РџРѕРґСЃС‡РµС‚ РѕС‡РєРѕРІ	*/
+	void CalculateScore(); // РџРѕРґСЃС‡РµС‚ РѕС‡РєРѕРІ
 	void addNum(int &Origin, int Add);
 
-	/*	Расчет центра в клетке	*/
+	/*	Р Р°СЃС‡РµС‚ С†РµРЅС‚СЂР° РІ РєР»РµС‚РєРµ	*/
 	int GET_CENTER(int point)
 	{
 		return ((point * _Range + _Shift) + ((point + 1) * _Range + _Shift)) / 2;

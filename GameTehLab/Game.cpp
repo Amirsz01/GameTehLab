@@ -1,4 +1,4 @@
-#include "Game.h"
+п»ї#include "Game.h"
 
 Game::Game()
 {
@@ -40,19 +40,19 @@ int Game::CreateMenu()
 		{
 			if (event.type == sf::Event::Closed)
 				this->window->close();
-			if (event.type == sf::Event::MouseButtonPressed)// если нажата клавиша мыши
+			if (event.type == sf::Event::MouseButtonPressed)// РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р° РјС‹С€Рё
 			{
-				if (event.key.code == sf::Mouse::Left) // а именно левая
+				if (event.key.code == sf::Mouse::Left) // Р° РёРјРµРЅРЅРѕ Р»РµРІР°СЏ
 				{
 					mouseCord = sf::Mouse::getPosition(*this->window);
-					if (mouseCord.x <= WINDOW_WIDTH && mouseCord.y <= WINDOW_HIGH && mouseCord.x >= 0 && mouseCord.y >= 0) // если клик в области экрана
+					if (mouseCord.x <= WINDOW_WIDTH && mouseCord.y <= WINDOW_HIGH && mouseCord.x >= 0 && mouseCord.y >= 0) // РµСЃР»Рё РєР»РёРє РІ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 					{
-						if (mouseCord.x >= WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 && mouseCord.x < WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 + BUTTON_WIDTH) // если клик в области кнопок
+						if (mouseCord.x >= WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 && mouseCord.x < WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 + BUTTON_WIDTH) // РµСЃР»Рё РєР»РёРє РІ РѕР±Р»Р°СЃС‚Рё РєРЅРѕРїРѕРє
 						{
 							int _range = (BUTTON_HEIGHT - TEXT_STATUS_HEIGHT) / 2 - _Thickness * 2;
 							int _correctCord = (mouseCord.y - _range/2 - _Thickness) % (int(BUTTON_HEIGHT*1.2));
 							int numButton = (mouseCord.y - (_range/2) - _Thickness) / int(BUTTON_HEIGHT * 1.2);
-							if (_correctCord > 0 && _correctCord < BUTTON_HEIGHT) // если клик в области кнопок
+							if (_correctCord > 0 && _correctCord < BUTTON_HEIGHT) // РµСЃР»Рё РєР»РёРє РІ РѕР±Р»Р°СЃС‚Рё РєРЅРѕРїРѕРє
 							{
 								switch (numButton)
 								{
@@ -64,35 +64,35 @@ int Game::CreateMenu()
 									break;
 								case 1:
 									cout << "***************************" << endl
-										<< "Меню настроек поля" << endl
+										<< "РњРµРЅСЋ РЅР°СЃС‚СЂРѕРµРє РїРѕР»СЏ" << endl
 										<< "***************************" << endl
-										<< "[1] Установить размер поля" << endl
-										<< "[2] Установить размер клетки" << endl
-										<< "[3] Установить толщину границы клетки" << endl
-										<< "[4] Установить смещение" << endl
-										<< "Выбор: ";
+										<< "[1] РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂР°Р·РјРµСЂ РїРѕР»СЏ" << endl
+										<< "[2] РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЂР°Р·РјРµСЂ РєР»РµС‚РєРё" << endl
+										<< "[3] РЈСЃС‚Р°РЅРѕРІРёС‚СЊ С‚РѕР»С‰РёРЅСѓ РіСЂР°РЅРёС†С‹ РєР»РµС‚РєРё" << endl
+										<< "[4] РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃРјРµС‰РµРЅРёРµ" << endl
+										<< "Р’С‹Р±РѕСЂ: ";
 									cin >> iMenuValue;
 									switch (iMenuValue)
 									{
 									case 1:
-										cout << "Значение параметра: " << NumPoints << endl
-											<< "Новое значение: ";
+										cout << "Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°: " << NumPoints << endl
+											<< "РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ: ";
 										cin >> NumPoints;
 										break;
 									case 2:
-										cout << "Значение параметра: " << _Range << endl
-											<< "Новое значение: ";
+										cout << "Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°: " << _Range << endl
+											<< "РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ: ";
 										cin >> _Range;
 										_TextHeight = _Range * 0.8;
 										break;
 									case 3:
-										cout << "Значение параметра: " << _Thickness << endl
-											<< "Новое значение: ";
+										cout << "Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°: " << _Thickness << endl
+											<< "РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ: ";
 										cin >> _Thickness;
 										break;
 									case 4:
-										cout << "Значение параметра: " << _Shift << endl
-											<< "Новое значение: ";
+										cout << "Р—РЅР°С‡РµРЅРёРµ РїР°СЂР°РјРµС‚СЂР°: " << _Shift << endl
+											<< "РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ: ";
 										cin >> _Shift;
 										break;
 									default:
@@ -205,12 +205,12 @@ void Game::StartGame()
 		{
 			if (event.type == sf::Event::Closed)
 				this->window->close();
-			if (event.type == sf::Event::MouseButtonPressed)// если нажата клавиша мыши
+			if (event.type == sf::Event::MouseButtonPressed)// РµСЃР»Рё РЅР°Р¶Р°С‚Р° РєР»Р°РІРёС€Р° РјС‹С€Рё
 			{
-				if (event.key.code == sf::Mouse::Left) // а именно левая
+				if (event.key.code == sf::Mouse::Left) // Р° РёРјРµРЅРЅРѕ Р»РµРІР°СЏ
 				{
 					mouseCord = sf::Mouse::getPosition(*this->window);
-					if (mouseCord.x >= _Shift && mouseCord.x <= WINDOW_WIDTH && mouseCord.y >= _Shift && mouseCord.y <= WINDOW_HIGH && !EndGame) // если клик в области экрана
+					if (mouseCord.x >= _Shift && mouseCord.x <= WINDOW_WIDTH && mouseCord.y >= _Shift && mouseCord.y <= WINDOW_HIGH && !EndGame) // РµСЃР»Рё РєР»РёРє РІ РѕР±Р»Р°СЃС‚Рё СЌРєСЂР°РЅР°
 					{
 						ind_col = (mouseCord.x - _Shift) / _Range;
 						ind_row = (mouseCord.y - _Shift) / _Range;
@@ -268,7 +268,7 @@ void Game::setStatus(string text, int height)
 	sf::Font font;
 	if (!font.loadFromFile("Equal-Regular.otf"))
 	{
-		cout << "Нет файла со шрифтом" << endl;
+		cout << "РќРµС‚ С„Р°Р№Р»Р° СЃРѕ С€СЂРёС„С‚РѕРј" << endl;
 		return;
 	}
 	sf::Text status;
@@ -286,7 +286,7 @@ void Game::setButton(string text, int height)
 	sf::Font font;
 	if (!font.loadFromFile("Equal-Regular.otf"))
 	{
-		cout << "Нет файла со шрифтом" << endl;
+		cout << "РќРµС‚ С„Р°Р№Р»Р° СЃРѕ С€СЂРёС„С‚РѕРј" << endl;
 		return;
 	}
 	sf::Text button;

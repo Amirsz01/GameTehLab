@@ -1,6 +1,6 @@
-#pragma once
+п»ї#pragma once
 //#define POLE 3
-//#define RANGE 50 // Расстояние между клетками
+//#define RANGE 50 // Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ РєР»РµС‚РєР°РјРё
 //#define WIDTH 2
 //#define SHIFT 200
 #define WINDOW_HIGH 720
