@@ -2,14 +2,45 @@
 
 Game::Game()
 {
-	NumPoints = 4;
-	_Range = 50;
-	_Thickness = 2;
-	_Shift = 200;
-	_TextHeight = _Range * 0.8;
-
 	this->window = new sf::RenderWindow(sf::VideoMode(WINDOW_WIDTH, WINDOW_HIGH), "BEST GAME IN THE WORLD");
+	LoadConfig();
 	CreateMenu();
+}
+
+int Game::LoadConfig()
+{
+	ifstream config(CONFIG_FILE);
+	string param;
+	int value;
+	if (!config.is_open())
+	{
+		config.close();
+		SaveConfig();
+		LoadConfig();
+	}
+	while (!config.eof())
+	{
+		config >> param >> value;
+		if (param == "Pole")
+		{
+			NumPoints = value;
+		}
+		if (param == "Range")
+		{
+			_Range = value;
+			_TextHeight = _Range * 0.8;
+		}
+		if (param == "Thickness")
+		{
+			_Thickness = value;
+		}
+		if (param == "Shift")
+		{
+			_Shift = value;
+		}
+	}
+	config.close();
+	return 0;
 }
 
 int Game::CreateMenu()
@@ -57,12 +88,14 @@ int Game::CreateMenu()
 								switch (numButton)
 								{
 								case 0:
+									system("CLS");
 									SetPlayers();
 									CreateArea();
 									DrawArea();
 									StartGame();
 									break;
 								case 1:
+									system("CLS");
 									cout << "***************************" << endl
 										<< "Меню настроек поля" << endl
 										<< "***************************" << endl
@@ -98,6 +131,9 @@ int Game::CreateMenu()
 									default:
 										break;
 									}
+									system("CLS");
+									cout << "Значение установлено!" << endl;
+									SaveConfig(NumPoints, _Range, _Thickness, _Shift);
 									break;
 								case 2:
 									this->window->close();
@@ -245,6 +281,7 @@ void Game::StartGame()
 						if (DrawArea() == 2)
 						{
 							this->EndGame();
+							EndGame = true;
 							continue;
 						}
 						Current_Player->_SIDE == ZERO ? Current_Player = &Players[1] : Current_Player = &Players[0];
@@ -352,4 +389,14 @@ void Game::addNum(int& Origin, int Add)
 {
 	Origin *= 10;
 	Origin += Add;
+}
+
+void Game::SaveConfig(int Param1, int Param2, int Param3, int Param4)
+{
+	ofstream config(CONFIG_FILE);
+	config << "Pole " << Param1 << endl
+		<< "Range " << Param2 << endl
+		<< "Thickness " << Param3 << endl
+		<< "Shift " << Param4;
+	config.close();
 }

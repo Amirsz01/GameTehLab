@@ -6,8 +6,9 @@
 #include "Cell.h"
 #include "Defines.h"
 #include "fstream"
+#include <string>
 
-#define IS_NETWORK false
+#define IS_NETWORK true
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
 	Game();
 
 	/*	Пошаговое создание игры	*/
+	int LoadConfig(); // Загрузить конфиг
 	int CreateMenu(); // Создание меню
 	void ClearPole(); // Очистка поля
 	void CreateArea(); // Создание поля
@@ -52,5 +54,7 @@ public:
 	{
 		return ((point * _Range + _Shift) + ((point + 1) * _Range + _Shift)) / 2;
 	}
+	/*	Побочные методы	*/
+	void SaveConfig(int Param1 = 4, int Param2 = 50, int Param3 = 2, int Param4 = 100);
 };
 

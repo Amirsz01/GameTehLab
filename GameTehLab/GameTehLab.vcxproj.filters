@@ -46,5 +46,8 @@
     <Text Include="Menu.txt">
       <Filter>Файлы ресурсов</Filter>
     </Text>
+    <Text Include="config\config.txt">
+      <Filter>Файлы ресурсов</Filter>
+    </Text>
   </ItemGroup>
 </Project>
