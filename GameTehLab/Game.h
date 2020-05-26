@@ -8,7 +8,7 @@
 #include "fstream"
 #include <string>
 
-#define IS_NETWORK true
+#define IS_NETWORK false
 
 using namespace std;
 

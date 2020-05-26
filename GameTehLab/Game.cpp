@@ -67,6 +67,8 @@ int Game::CreateMenu()
 		sf::Vector2i mouseCord;
 		int ind_col, ind_row;
 		int iMenuValue;
+		int tmp;
+		bool Correct = true;
 		while (this->window->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
@@ -81,7 +83,7 @@ int Game::CreateMenu()
 						if (mouseCord.x >= WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 && mouseCord.x < WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2 + BUTTON_WIDTH) // если клик в области кнопок
 						{
 							int _range = (BUTTON_HEIGHT - TEXT_STATUS_HEIGHT) / 2 - _Thickness * 2;
-							int _correctCord = (mouseCord.y - _range/2 - _Thickness) % (int(BUTTON_HEIGHT*1.2));
+							int _correctCord = (mouseCord.y - _range/2 - _Thickness) % (int(BUTTON_HEIGHT * 1.2));
 							int numButton = (mouseCord.y - (_range/2) - _Thickness) / int(BUTTON_HEIGHT * 1.2);
 							if (_correctCord > 0 && _correctCord < BUTTON_HEIGHT) // если клик в области кнопок
 							{
@@ -96,6 +98,7 @@ int Game::CreateMenu()
 									break;
 								case 1:
 									system("CLS");
+									Correct = true;
 									cout << "***************************" << endl
 										<< "Меню настроек поля" << endl
 										<< "***************************" << endl
@@ -110,30 +113,70 @@ int Game::CreateMenu()
 									case 1:
 										cout << "Значение параметра: " << NumPoints << endl
 											<< "Новое значение: ";
-										cin >> NumPoints;
+										cin >> tmp;
+										if (tmp < 2)
+										{
+											cout << "Поле не может быть меньше 2х2" << endl;
+											Correct = false;
+										}
+										else
+										{
+											NumPoints = tmp;
+										}
 										break;
 									case 2:
 										cout << "Значение параметра: " << _Range << endl
 											<< "Новое значение: ";
-										cin >> _Range;
-										_TextHeight = _Range * 0.8;
+										cin >> tmp;
+										if (tmp < 20)
+										{
+											cout << "Расстояние между клетками не может быть меньше 20" << endl;
+											Correct = false;
+										}
+										else
+										{
+											_Range = tmp;
+											_TextHeight = _Range * 0.8;
+										}
 										break;
 									case 3:
 										cout << "Значение параметра: " << _Thickness << endl
 											<< "Новое значение: ";
-										cin >> _Thickness;
+										cin >> tmp;
+										if (tmp < 1)
+										{
+											cout << "Толщина грани не может быть меньше 1" << endl;
+											Correct = false;
+										}
+										else
+										{
+											_Thickness = tmp;
+											_TextHeight = _Range * 0.8;
+										}
 										break;
 									case 4:
 										cout << "Значение параметра: " << _Shift << endl
 											<< "Новое значение: ";
-										cin >> _Shift;
+										cin >> tmp;
+										if (tmp < 0)
+										{
+											cout << "Смещение не может быть меньше 0" << endl;
+											Correct = false;
+										}
+										else
+										{
+											_Shift = tmp;
+										}
 										break;
 									default:
 										break;
 									}
-									system("CLS");
-									cout << "Значение установлено!" << endl;
-									SaveConfig(NumPoints, _Range, _Thickness, _Shift);
+									if (Correct)
+									{
+										system("CLS");
+										cout << "Значение установлено!" << endl;
+										SaveConfig(NumPoints, _Range, _Thickness, _Shift);
+									}
 									break;
 								case 2:
 									this->window->close();

@@ -1,4 +1,4 @@
-Pole 5
-Range 45
+Pole 3
+Range 70
 Thickness 2
 Shift 100
